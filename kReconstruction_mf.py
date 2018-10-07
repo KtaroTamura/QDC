@@ -7,8 +7,8 @@ import myfunc as mf
 bin_min=-420
 bin_max=4200.
 rebin=int((bin_max-bin_min)/10)
-h1file="./databox_summer/sdata2018_0035.out"
-h2file="./databox_summer/sdata2018_0155.out"
+h1file="../Canadawork/databox_summer/sdata2018_0035.out"
+h2file="../Canadawork/databox_summer/sdata2018_0155.out"
 
 ##Depth setup##
 depthA_Al=0.01

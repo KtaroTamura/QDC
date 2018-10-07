@@ -14,8 +14,8 @@ int kplot(int run_num,int run_num2){
 	int maxA,maxB;
 
 	//Naming file & graph//
-	sprintf(inputfileA,"./databox_summer/sdata2018_%04d.out",run_num);
-	sprintf(inputfileB,"./databox_summer/sdata2018_%04d.out",run_num2);
+	sprintf(inputfileA,"../Canadawork/databox_summer/sdata2018_%04d.out",run_num);
+	sprintf(inputfileB,"../Canadawork/databox_summer/sdata2018_%04d.out",run_num2);
 	sprintf(gtitle,"QDCdata2018_%04d and %04d",run_num,run_num2);
 	sprintf(nameA,"%04d",run_num);
 	sprintf(nameB,"%04d",run_num2);	

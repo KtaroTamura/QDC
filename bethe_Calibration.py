@@ -17,8 +17,8 @@ mf.sigma=0.1
 ped=52
 fit_min=1700.
 fit_max=2200.
-#h1file="./databox_summer/sdata2018_0137.out"
-h1file="./databox_summer/sdata2018_0155.out"
+#h1file="../Canadawork/databox_summer/sdata2018_0137.out"
+h1file="../Canadawork/databox_summer/sdata2018_0155.out"
 
 a=7.66474e-04
 zero=52.
