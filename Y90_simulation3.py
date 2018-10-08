@@ -15,6 +15,7 @@ if __name__=='__main__':
 	Pori=np.array([])
 	Pout=np.empty([])
 	Pin=np.empty([])
+	flag=0
 	for e in range(1,230):
 		T=0.01*e
 		T2=mf.int_bethe(T)
@@ -23,6 +24,9 @@ if __name__=='__main__':
 		P1=mf.Fermi(T)*mf.calc(T)
 		Pori=np.append(Pori,P1)
 		if T2>0:
+			if flag==0:
+				print('T={}, T2={}'.format(T,T2))
+				flag+=1
 			Pin=np.append(Pin,P1)
 		else:
 			Pin=np.append(Pin,0)	

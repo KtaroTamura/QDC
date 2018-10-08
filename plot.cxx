@@ -12,7 +12,7 @@ int plot(int run_num){
 	//Naming File&Graph//
 	FILE *fp;
 	char inputfile[50]={0},graphtitle[50]={0};
-	sprintf(inputfile,"../Camadawork/databox_summer/sdata2018_%04d.out",run_num);
+	sprintf(inputfile,"../Canadawork/databox_summer/sdata2018_%04d.out",run_num);
 	sprintf(graphtitle,"data2018_%04d.out",run_num);
 	
 	gStyle->SetOptStat();	

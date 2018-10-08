@@ -15,10 +15,10 @@ mf.sigma=0.2
 
 ##Fitting seup##
 ped=52
-fit_min=2300.
-fit_max=2800.
+fit_min=1700.
+fit_max=2200.
 #h1file="../Canadawork/databox_summer/sdata2018_0137.out"
-h1file="../Canadawork/databox_summer/sdata2018_0035.out"
+h1file="../Canadawork/databox_summer/sdata2018_0043.out"
 
 
 class Fitting:
@@ -40,7 +40,7 @@ class Fitting:
 if __name__=="__main__":
 	##declation##
 	ROOT.gStyle.SetOptLogy()
-	h1=ROOT.TH1D("h1","data"+h1file.lstrip("./databox_summer/sdata"),rebin,bin_min,bin_max)
+	h1=ROOT.TH1D("h1","data"+h1file.lstrip("..Canadawork/databox_summer/sdata"),rebin,bin_min,bin_max)
 	
 	##File Read & Fill histgram##
 	data=open(h1file,"r")
@@ -72,7 +72,7 @@ if __name__=="__main__":
 	##Draw TGraph##
 	ROOT.gStyle.SetOptFit();
 	g1=ROOT.TGraph()
-	for ch in range(0,4000,5):	
+	for ch in range(0,4000,10):	
 		t0=a*(ch-zero)
 		if t0>2.28:
 			break
@@ -90,12 +90,13 @@ if __name__=="__main__":
 				break
 	g1.SetMarkerStyle(7)
 	g1.Draw("same,P")
-
+'''
 	##Save calibration parameters##
 	h1file=h1file.lstrip("./data_summer/sdata2018")
 	calib_num=int(re.sub(r'\D','',h1file))
 	output=[a,C,zero,calib_num]
 	np.savetxt("setup_calib.csv",output,delimiter=',')
+'''
 	
 def stop(self):
 	sys.stderr.write('[Read]\tstop.\tPress "q"to quit >')
