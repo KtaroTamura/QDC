@@ -43,7 +43,7 @@ class Fitting:
 if __name__=="__main__":
 	##declation##
 	ROOT.gStyle.SetOptLogy()
-	h1=ROOT.TH1D("h1","data"+h1file.lstrip("./databox_summer/sdata"),rebin,bin_min,bin_max)
+	h1=ROOT.TH1D("h1","data"+h1file.lstrip("../Canadawork/databox_summer/sdata"),rebin,bin_min,bin_max)
 	
 	##File Read & Fill histgram##
 	data=open(h1file,"r")
@@ -84,8 +84,8 @@ if __name__=="__main__":
 			t=mf.E_correction(t0)
 			PY=0
 			if t>0 and t<2.28:
-				PY=C*mf.G_correction(t)/23700.986076290093		
-				#PY=C*mf.Fermi(t)*mf.calc(t)/23700.986076290093	
+				#PY=C*mf.G_correction(t)/23700.986076290093		
+				PY=C*mf.Fermi(t)*mf.calc(t)/23700.986076290093	
 			y=PY
 			g1.SetPoint(ch,ch,y)
 #			print("{},{}".format(ch,t))
