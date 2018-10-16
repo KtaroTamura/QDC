@@ -8,15 +8,15 @@ bin_max=4200.
 rebin=int((bin_max-bin_min)/10)
 
 ##Myfunc setuop##
-mf.depth_Al=0.0
+mf.depth_Al=0.02
 mf.depth_CH=0.1
-mf.depth_Pb=0.0
+mf.depth_Pb=0.01
 mf.sigma=0.1
 
 ##Fitting seup##
 ped=52
-fit_min=1700.
-fit_max=2200.
+fit_min=1750.
+fit_max=2300.
 #h1file="../Canadawork/databox_summer/sdata2018_0137.out"
 h1file="../Canadawork/databox_summer/sdata2018_0155.out"
 

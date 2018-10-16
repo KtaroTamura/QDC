@@ -3,8 +3,8 @@ import numpy as np
 import ROOT,sys,re
 
 ##Myfunc setuop##
-mf.depth_Al=0.01
-mf.depth_CH=0.0673858
+mf.depth_Al=0.02
+mf.depth_CH=0.04001
 mf.depth_Pb=0.01
 mf.sigma=0.1
 
@@ -31,7 +31,7 @@ if __name__=='__main__':
 		else:
 			Pin=np.append(Pin,0)	
 	mf.depth_Al=0.02
-	mf.depth_CH=0.1
+	mf.depth_CH=0.04001+0.00473439
 	mf.depth_Pb=0.01
 	mf.sigma=0.1
 	for e in range(1,230):

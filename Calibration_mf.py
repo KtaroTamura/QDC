@@ -15,10 +15,10 @@ mf.sigma=0.2
 
 ##Fitting seup##
 ped=52
-fit_min=1700.
-fit_max=2200.
+fit_min=2300.
+fit_max=2800.
 #h1file="../Canadawork/databox_summer/sdata2018_0137.out"
-h1file="../Canadawork/databox_summer/sdata2018_0043.out"
+h1file="../Canadawork/databox_summer/sdata2018_0035.out"
 
 
 class Fitting:
@@ -31,8 +31,8 @@ class Fitting:
 		if T0>0 and T0<mf.E_max:
 			T=mf.E_correction(T0)
 			if T>0 and T<mf.E_max:
-				#P=C*mf.G_correction(T)/23700.986076290093
-				P=C*mf.Fermi(T)*mf.calc(T)/23700.986076290093
+				P=C*mf.G_correction(T)/23700.986076290093
+				#P=C*mf.Fermi(T)*mf.calc(T)/23700.986076290093
 			else:
 				P=0	
 		return P
@@ -80,7 +80,7 @@ if __name__=="__main__":
 			t=mf.E_correction(t0)
 			PY=0
 			if t>0 and t<2.28:
-				#PY=C*mf.G_correction(t)/23700.986076290093		
+				PY=C*mf.G_correction(t)/23700.986076290093		
 				PY=C*mf.Fermi(t)*mf.calc(t)/23700.986076290093	
 			y=PY
 			g1.SetPoint(ch,ch,y)
