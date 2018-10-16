@@ -15,10 +15,10 @@ mf.sigma=0.2
 
 ##Fitting seup##
 ped=52
-fit_min=1700.
-fit_max=2200.
+fit_min=2300.
+fit_max=2800.
 #h1file="../Canadawork/databox_summer/sdata2018_0137.out"
-h1file="../Canadawork/databox_summer/sdata2018_0043.out"
+h1file="../Canadawork/databox_summer/sdata2018_0035.out"
 
 
 class Fitting:
