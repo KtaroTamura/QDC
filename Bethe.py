@@ -3,8 +3,8 @@ import numpy as np
 import ROOT,sys,re
 
 ##Myfunc setuop##
-mf.depth_Al=0.03
-mf.depth_CH=0.1
+mf.depth_Al=0.02
+mf.depth_CH=0.04001
 mf.depth_Pb=0.01
 
 if __name__=='__main__':

@@ -16,7 +16,7 @@ if __name__=='__main__':
 	print("a={}, b={}, C={}".format(para_opt[0],para_opt[1],para_opt[2]))
 	fit_result=fitfunc(position,para_opt[0],para_opt[1],para_opt[2])
 	plt.plot(position,fit_result,label='fit',color='r')
-	plt.title("SC channel dependent")
+	plt.title("SC position dependent")
 	plt.xlabel(u'Source position (from down)')
 	plt.ylabel(u'End point')
 	plt.ylim([0,4500])
