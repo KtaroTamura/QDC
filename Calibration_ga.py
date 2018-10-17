@@ -8,34 +8,31 @@ bin_max=4200.
 rebin=int((bin_max-bin_min)/10)
 
 ##Myfunc setuop##
-mf.depth_Al=0.02
-mf.depth_CH=0.1
-mf.depth_Pb=0.01
+mf.depth_Al=0.01
+mf.depth_CH=0.
+mf.depth_Pb=0.
 mf.sigma=0.1
 
 ##Fitting seup##
 ped=52
-fit_min=1600.
-fit_max=2300.
+fit_min=1800.
+fit_max=2900.
 #h1file="../Canadawork/databox_summer/sdata2018_0137.out"
-h1file="../Canadawork/databox_summer/sdata2018_0155.out"
+h1file="../Canadawork/databox_summer/sdata2018_0035.out"
 
-a=7.66474e-04
-zero=52.
 
 class Fitting:
 	def __call__(self, ch, par):
-		C=par[0]
-		mf.depth_Al=par[1]
-		mf.depth_CH=par[2]
-		mf.depth_Pb=par[3]
+		a=par[0]
+		C=par[1]
+		zero=par[2]
 		T0=a*(ch[0]-zero)
 		P=0
 		if T0>0 and T0<mf.E_max:
 			T=mf.E_correction(T0)
 			if T>0 and T<mf.E_max:
-				#P=C*mf.G_correction(T)/23700.986076290093
-				P=C*mf.Fermi(T)*mf.calc(T)/23700.986076290093
+				P=C*mf.G_correction(T)/23700.986076290093
+				#P=C*mf.Fermi(T)*mf.calc(T)/23700.986076290093
 			else:
 				P=0	
 		return P
@@ -43,27 +40,27 @@ class Fitting:
 if __name__=="__main__":
 	##declation##
 	ROOT.gStyle.SetOptLogy()
-	h1=ROOT.TH1D("h1","data"+h1file.lstrip("../Canadawork/databox_summer/sdata"),rebin,bin_min,bin_max)
-	
-	##File Read & Fill histgram##
+	h1=ROOT.TH1D("h1","data"+h1file.lstrip("..Canadawork/databox_summer/sdata"),rebin,bin_min,bin_max)
+
+##File Read & Fill histgram##
 	data=open(h1file,"r")
 	for line in data:
 		count=int(line)
 		h1.Fill(count)
 	data.close()
-	
+
 	##Fitting##
-	f1=ROOT.TF1("f1",Fitting(),fit_min,fit_max,4)
-	f1.SetParNames("N_{0}","Al","CH","Pb")
-	f1.SetParameters(2.35e+06,0.03,0.05,0.01)
-	f1.FixParameter(1,0.01)
-	f1.FixParameter(3,0.01)
-#	f1.FixParameter(0,2.3468e+06)
-	h1.Fit("f1","","",fit_min,fit_max)
-	C=f1.GetParameter(0)
-	mf.depth_Al=f1.GetParameter(1)
-	mf.depth_CH=f1.GetParameter(2)
-	mf.depth_Pb=f1.GetParameter(3)
+	f1=ROOT.TF1("f1",Fitting(),fit_min,fit_max,3)
+	f1.SetParNames("a","N_{0}","zero")
+	f1.SetParLimits(0,0.,10.)
+	f1.SetParLimits(2,0.,3000)
+	f1.SetParameters(0.00065,1000000,ped)
+#	f1.FixParameter(0,0.0007565)
+	f1.FixParameter(2,ped)
+	h1.Fit("f1","P","",fit_min,fit_max)
+	a=f1.GetParameter(0)
+	C=f1.GetParameter(1)
+	zero=f1.GetParameter(2)
 
 	##Draw Setup##
 	h1.GetXaxis().SetTitle("QDC ch [ch]")
@@ -75,7 +72,7 @@ if __name__=="__main__":
 	##Draw TGraph##
 	ROOT.gStyle.SetOptFit();
 	g1=ROOT.TGraph()
-	for ch in range(0,4000,10):	
+	for ch in range(0,4000,40):	
 		t0=a*(ch-zero)
 		if t0>2.28:
 			break
@@ -83,11 +80,11 @@ if __name__=="__main__":
 			t=mf.E_correction(t0)
 			PY=0
 			if t>0 and t<2.28:
-				#PY=C*mf.G_correction(t)/23700.986076290093		
-				PY=C*mf.Fermi(t)*mf.calc(t)/23700.986076290093	
+				PY=C*mf.G_correction(t)/23700.986076290093
+				#PY=C*mf.Fermi(t)*mf.calc(t)/23700.986076290093
 			y=PY
 			g1.SetPoint(ch,ch,y)
-#			print("{},{}".format(ch,t))
+		#	print("{},{}".format(ch,t))
 			if y>0 and y<0.5:
 				print("EP={}".format(ch))
 				break
@@ -99,7 +96,8 @@ if __name__=="__main__":
 	calib_num=int(re.sub(r'\D','',h1file))
 	output=[a,C,zero,calib_num]
 	np.savetxt("setup_calib.csv",output,delimiter=',')
-'''	
+'''
+	
 def stop(self):
 	sys.stderr.write('[Read]\tstop.\tPress "q"to quit >')
 	ans=raw_input ('>')

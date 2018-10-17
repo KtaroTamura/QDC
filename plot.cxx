@@ -35,7 +35,7 @@ int plot(int run_num){
 	h1->SetXTitle("QDC channel");
 	h1->SetYTitle("Count");
 	//h1->Draw("E");
-	h1->Draw();
+	h1->Draw("E");
 	fclose(fp);
 	return 0;
 }

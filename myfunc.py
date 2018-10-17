@@ -57,16 +57,16 @@ sigma=0.3
 
 ##Spectrum  Calclator##
 def Fermi(T):
-    R=1.25*pow(A,0.33)/hc
-    g=math.sqrt(1-alpha*alpha*Z*Z)
-    p=math.sqrt(T*T+2*me*T)
-    v=alpha*Z*(T+me)/p
-    part1=((1+g)/2)*4*pow(2*p*R,2*g-2)
-    part2=math.exp(+math.pi*v)
-    part3=abs(gamma(g+1j*v))
-    part4=gamma(2*g+1)
-    F=part1*part2*part3*part3/(part4*part4)
-    return F
+	R=1.25*pow(A,0.33)/hc
+	g=math.sqrt(1-alpha*alpha*Z*Z)
+	p=math.sqrt(T*T+2*me*T)
+	v=alpha*Z*(T+me)/p
+	part1=((1+g)/2)*4*pow(2*p*R,2*g-2)
+	part2=math.exp(+math.pi*v)
+	part3=abs(gamma(g+1j*v))
+	part4=gamma(2*g+1)
+	F=part1*part2*part3*part3/(part4*part4)
+	return F
 
 def calc(T):
 	cal=(E_max-T)*(E_max-T)*(T+me)*math.sqrt(T*T+2*me*T)
@@ -120,22 +120,22 @@ def int_bethe(T):
 	return T0
 
 ##E_correction##
-def E_correction(E_det):                                                            
-    pre_delta=0.5
-    E_emit=0
-    for L in range(1,100):
-        loss=0.01*L
-        if E_det+loss>0:
-            M=(E_det+loss)-int_bethe(E_det+loss)
-            delta=abs(M-loss)
-            if delta<pre_delta:
-                pre_delta=delta
-                E_emit=E_det+loss
-            elif delta<0.001:
-                pre_delta=delta
-                E_emit=E_det+loss
-                break
-    return E_emit
+def E_correction(E_det):
+	pre_delta=0.5
+	E_emit=0
+	for L in range(1,100):
+		loss=0.01*L
+		if E_det+loss>0:
+			M=(E_det+loss)-int_bethe(E_det+loss)
+			delta=abs(M-loss)
+		if delta<pre_delta:
+			pre_delta=delta
+			E_emit=E_det+loss
+		elif delta<0.001:
+			pre_delta=delta
+			E_emit=E_det+loss
+			break
+		return E_emit
 
 ##Gaussian correction##
 def Gauss(x):
@@ -149,7 +149,7 @@ def G_correction(T):
 		w=w+1
 		x=0.05*X
 		f=Gauss(x)
-		if T+x>0 or T+x<E_max:
+		if T+x>0 and T+x<E_max:
 			P=Fermi(T+x)*calc(T+x)*f
 		else:
 			P=Fermi(T)*calc(T)*f
