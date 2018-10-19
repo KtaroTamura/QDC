@@ -112,30 +112,35 @@ def bethe(T,mat):
 ##integral_bethe##
 def int_bethe(T):
 	T0=T
-	for l in range(0,9):
+	for l in range(0,10):
 		Eloss=(bethe(T0,'Al')+bethe(T0,'CH')+bethe(T0,'Pb'))*0.1
 		T0=T0-Eloss
+		#print("l={},T0={}".format(l,T0))
 		if T0<0:
+			#T0=T0-(bethe(T,'Al')+bethe(T,'CH')+bethe(T,'Pb'))*(9-l)*0.1
+			T0=0
 			break
 	return T0
 
 ##E_correction##
 def E_correction(E_det):
+	delta=0.6
 	pre_delta=0.5
 	E_emit=0
-	for L in range(1,100):
-		loss=0.01*L
+	for L in range(1,1000):
+		loss=0.001*L
 		if E_det+loss>0:
 			M=(E_det+loss)-int_bethe(E_det+loss)
 			delta=abs(M-loss)
-		if delta<pre_delta:
-			pre_delta=delta
-			E_emit=E_det+loss
-		elif delta<0.001:
-			pre_delta=delta
-			E_emit=E_det+loss
-			break
-		return E_emit
+			#print(pre_delta)
+			if delta<pre_delta:
+				pre_delta=delta
+				E_emit=E_det+loss
+			elif delta<0.001:
+				pre_delta=delta
+				E_emit=E_det+loss
+				break
+	return E_emit
 
 ##Gaussian correction##
 def Gauss(x):
