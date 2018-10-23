@@ -127,8 +127,8 @@ def E_correction(E_det):
 	delta=0.6
 	pre_delta=0.5
 	E_emit=0
-	for L in range(1,1000):
-		loss=0.001*L
+	for L in range(1,100):
+		loss=0.01*L
 		if E_det+loss>0:
 			M=(E_det+loss)-int_bethe(E_det+loss)
 			delta=abs(M-loss)

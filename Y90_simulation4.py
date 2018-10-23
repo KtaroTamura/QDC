@@ -5,9 +5,9 @@ import ROOT,sys,re
 ##Myfunc setuop##
 #inside
 mf.depth_Al=0.01
-mf.depth_CH=0.03963
+mf.depth_CH=0.003968
 mf.depth_Pb=0.008
-mf.sigma=0.01257
+mf.sigma=0.01429
 
 if __name__=='__main__':
 	T0=np.array([])
@@ -20,30 +20,34 @@ if __name__=='__main__':
 	for e in range(1,230):
 		T=0.01*e
 		T2=mf.int_bethe(T)
+		#loss=(mf.bethe(T,'Al')+mf.bethe(T,'CH')+mf.bethe(T,'Pb'))
+		#T2=T-loss
 		T0=np.append(T0,T)
 		T1=np.append(T1,T2)
 		P1=mf.Fermi(T)*mf.calc(T)
 		Pori=np.append(Pori,P1)
+		Pin=np.append(Pin,P1)
+		print('T={}, T2={}'.format(T,T2))
 		if T2>0:
 			if flag==0:
-				print('T={}, T2={}'.format(T,T2))
+				#print('T={}, T2={}'.format(T,T2))
 				flag+=1
-			Pin=np.append(Pin,P1)
-		else:
-			Pin=np.append(Pin,0)	
-	mf.depth_Al=0.005353
+	mf.depth_Al=0.005358
 	mf.depth_CH=0.
 	mf.depth_Pb=0.
-	mf.sigma=0.01257
+	mf.sigma=0.01429
 	for e in range(1,230):
 		T=0.01*e
 		T2=mf.int_bethe(T)
+		#loss=(mf.bethe(T,'Al')+mf.bethe(T,'CH')+mf.bethe(T,'Pb'))
+		#T2=T-loss
 		Tout=np.append(Tout,T2)
 		P1=mf.Fermi(T)*mf.calc(T)
-		if T2>0:
-			Pout=np.append(Pout,P1)
-		else:
-			Pout=np.append(Pout,0)
+		Pout=np.append(Pout,P1)
+#		if T2>0:
+#			Pout=np.append(Pout,P1)
+#		else:
+#			Pout=np.append(Pout,0)
 	Pori=Pori/Pori.sum()
 	Pin=Pin/Pin.sum()
 	Pout=Pout/Pout.sum()
@@ -57,8 +61,8 @@ if __name__=='__main__':
 
 	ROOT.gStyle.SetOptLogy()
 	g1=ROOT.TGraph(n,T0,Pori)
-	g2=ROOT.TGraph(n,Tout,Pout)
-	g3=ROOT.TGraph(n,T1,Pin)
+	g2=ROOT.TGraph(n,Tout,Pori)
+	g3=ROOT.TGraph(n,T1,Pori)
 	g1.SetLineColor(2)	
 	g2.SetLineColor(4)	
 	g3.SetLineColor(6)	
@@ -72,6 +76,8 @@ if __name__=='__main__':
 	g3.SetTitle("Simulation")
 	g3.GetXaxis().SetTitle("Energy [MeV]")
 	g3.GetXaxis().SetLimits(0.,2.5)
+	#g3.GetXaxis().SetLimits(0.,2.5)
+	g3.GetYaxis().SetRangeUser(1.0e-010,1)
 	g3.GetYaxis().SetTitle("Probablity")
 	legend=ROOT.TLegend(0.6,0.9,0.89,0.75)
 	legend.AddEntry(g1,"original","l")

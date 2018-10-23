@@ -7,18 +7,19 @@ import myfunc as mf
 bin_min=-420
 bin_max=4200.
 rebin=int((bin_max-bin_min)/10)
-h1file="./databox_summer/sdata2018_0035.out"
-h2file="./databox_summer/sdata2018_0155.out"
+h1file="../Canadawork/databox_summer/sdata2018_0162.out"
+h2file="../Canadawork/databox_summer/sdata2018_0155.out"
 
 ##Depth setup##
-depthA_Al=0.01
+depthA_Al=0.005
 depthA_CH=0.
 depthA_Pb=0.
 
-depthB_Al=0.01
-depthB_CH=0.0673858
-depthB_Pb=0.01
+depthB_Al=0.02
+depthB_CH=0.07092
+depthB_Pb=0.
 
+mf.sigma=0.01256
 ##integral_bethe##
 def int_betheA(T):
 	mf.depth_Al=depthA_Al
@@ -120,7 +121,8 @@ if __name__=="__main__":
 		count_error=math.sqrt(count_bin)
 		N=0
 		if T0>0:
-			N=C1*mf.Fermi(T0)*mf.calc(T0)/23700.98076290093
+			#N=C1*mf.Fermi(T0)*mf.calc(T0)/23700.98076290093
+			N=C1*mf.G_correction(T0)/23700.98076290093
 		g1.SetPoint(bin_num-1,T0,count_bin)
 		g1.SetPointError(bin_num-1,0,count_error)
 		g11.SetPoint(bin_num-1,T,count_bin)
@@ -138,7 +140,8 @@ if __name__=="__main__":
 		count_error2=math.sqrt(count_bin2)
 		N2=0
 		if T02>0:
-			N2=C2*mf.Fermi(T02)*mf.calc(T02)/23700.98076290093
+			#N2=C2*mf.Fermi(T02)*mf.calc(T02)/23700.98076290093
+			N2=C2*mf.G_correction(T02)/23700.98076290093
 		g2.SetPoint(bin_num2-1,T02,count_bin2)
 		g2.SetPointError(bin_num2-1,0,count_error2)
 		g22.SetPoint(bin_num2-1,T2,count_bin2)

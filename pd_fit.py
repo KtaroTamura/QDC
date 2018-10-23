@@ -19,7 +19,7 @@ if __name__=='__main__':
 	ax=plt.subplot()
 	ax.errorbar(position,EP,xerr=p_err,yerr=err,fmt='o',color='b',label='experiment')
 	MiF.Setup(position,EP,p_err,err,func,ax)
-	MiF.SetRange(0.,35.)
+#	MiF.SetRange(0.,35.)
 	MiF.SetLimit(lim_a=(0,1),lim_b=(500,1500))
 	result=MiF.chisquare(0.01,1000,3000)
 	plt.title(u'SC position dependent')

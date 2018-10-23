@@ -8,9 +8,9 @@ bin_max=4200.
 rebin=int((bin_max-bin_min)/10)
 
 ##Myfunc setuop##
-mf.depth_Al=0.02
+mf.depth_Al=0.01
 mf.depth_CH=0.09
-mf.depth_Pb=0.01
+mf.depth_Pb=0.008
 #mf.sigma=0.016498
 mf.sigma=0.01
 
@@ -22,7 +22,7 @@ fit_max=2700.
 h1file="../Canadawork/databox_summer/sdata2018_0155.out"
 
 #a=7.66477e-04
-a=7.51035e-04
+a=7.47429e-04
 zero=52.
 
 class Fitting:
@@ -57,13 +57,14 @@ if __name__=="__main__":
 	##Fitting##
 	f1=ROOT.TF1("f1",Fitting(),fit_min,fit_max,4)
 	f1.SetParNames("N_{0}","CH","ped","sigma")
-	f1.SetParameters(2.35e+06,0.0755816,-250,0.01)
-	f1.SetParLimits(1,0.06,0.08)
+	f1.SetParameters(2.35e+06,0.001,-190,0.01)
+	f1.SetParLimits(1,0.,0.08)
 	f1.SetParLimits(0,1e+04,1e+07)
 	f1.SetParLimits(3,0.0,0.1)
-	#f1.FixParameter(2,-188.035)
-	f1.FixParameter(3,0.0125690)
-	f1.FixParameter(1,0.0755816)
+	f1.SetParLimits(2,-200,200)
+	#f1.FixParameter(3,0.01429)
+	f1.FixParameter(2,52.)
+	#f1.FixParameter(1,0.)
 	h1.Fit("f1","P","",fit_min,fit_max)
 	C=f1.GetParameter(0)
 	mf.depth_CH=f1.GetParameter(1)
@@ -86,12 +87,12 @@ if __name__=="__main__":
 			break
 		if t0>0:
 			t=mf.E_correction(t0)
-			print("t0={},t={}".format(t0,t))
 			PY=0
 			if t>0 and t<2.28:
 				PY=C*mf.G_correction(t)/23700.986076290093		
 				#PY=C*mf.Fermi(t)*mf.calc(t)/23700.986076290093	
 			y=PY
+			#print("t0={},t={}".format(t0,t))
 			g1.SetPoint(ch,ch,y)
 #			print("{},{}".format(ch,t))
 			if y>0 and y<0.5:

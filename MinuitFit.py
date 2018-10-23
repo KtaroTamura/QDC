@@ -41,6 +41,10 @@ def Setup(main_x,main_y,main_xerr,main_yerr,main_func,main_ax):
 	xmin=np.amin(data_x)
 	xmax=np.amax(data_x)
 	x_div=(xmax-xmin)/100
+	if type(x_err)==int or type(x_err)==float:
+		x_err=np.full(data_x.shape[0],x_err)
+	if type(y_err)==int or type(y_err)==float:
+		y_err=np.full(data_x.shape[0],y_err)
 	return 0
 
 	
@@ -98,10 +102,7 @@ def least_square4(a,b,c,d):
 
 def Draw_graph(*para,k=0):
 	global graph_counter
-	gx=np.empty((0,1))
-	for j in range(0,100):
-		x=xmin+j*x_div
-		gx=np.append(gx,x)
+	gx=np.arange(xmin,xmax,x_div)
 	fit_line=fitfunc(gx,*para)
 	ax.plot(gx,fit_line,color='r')
 	if graph_counter==0:
@@ -118,8 +119,8 @@ def Draw_graph(*para,k=0):
 #
 def project_err(*para):
 	dh=0.001
-	dydx=(fitfunc(data_x+dh,*para)-fitfunc(data_x,*para))/dh
-	vir_err=dydx*x_err
+	dfdx=(fitfunc(data_x+dh,*para)-fitfunc(data_x,*para))/dh
+	vir_err=dfdx*x_err
 	return vir_err
 
 def fitfunc():
@@ -151,6 +152,7 @@ def SetRange(x_min,x_max):
 	Y_err_new=np.empty((0,1))
 	for ii in range(0,n):
 		if data_x[ii]>=x_min and data_x[ii]<=x_max:
+			print("{}".format(data_x[ii]))
 			X_new=np.append(X_new,data_x[ii])
 			Y_new=np.append(Y_new,data_y[ii])
 			X_err_new=np.append(X_err_new,x_err[ii])
@@ -164,8 +166,3 @@ def SetRange(x_min,x_max):
 	x_div=(xmax-xmin)/100
 	return X_new,Y_new,X_err_new,Y_err_new
 	
-'''
-def least_square(a):
-	para=[a]
-	return sum((data_y-fitfunc(data_x,*para))**2/y_err**2)
-'''

@@ -3,12 +3,12 @@ import ROOT,sys,re
 import numpy as np
 
 ##Set Up##
-bin_min=-100
+bin_min=0
 bin_max=4200.
 rebin=int((bin_max-bin_min)/10)
 
 ##Myfunc setuop##
-mf.depth_Al=0.02
+mf.depth_Al=0.01
 mf.depth_CH=0.
 mf.depth_Pb=0.
 mf.sigma=0.01
@@ -58,16 +58,19 @@ if __name__=="__main__":
 	f1.SetParNames("a","N_{0}","zero","depth_Al","sigma")
 	f1.SetParLimits(0,6.5e-04,8.5e-04)
 	f1.SetParLimits(1,1.0e+05,1.0e+07)
-	f1.SetParLimits(2,-200,70)
 	f1.SetParLimits(3,0.005,0.1)
-	f1.SetParLimits(4,0.,0.2)
-	f1.SetParameters(0.00065,1000000,-150,0.01,0.1)
-	f1.FixParameter(2,ped)
+	f1.SetParLimits(4,0.005,0.1)
+	f1.SetParameters(0.00065,1000000,-150,0.005033,0.012)
+	f1.FixParameter(0,7.47429e-04)
+	f1.FixParameter(1,7.95340e+05)
+	#f1.FixParameter(2,ped)
+	#f1.FixParameter(3,5.35794e-03)
+	f1.FixParameter(4,1.52911e-02)
 	h1.Fit("f1","P","",fit_min,fit_max)
 	a=f1.GetParameter(0)
 	C=f1.GetParameter(1)
-	zero=f1.GetParameter(2)
-	#zero=ped-loss/a
+	#zero=f1.GetParameter(2)
+	zero=ped
 	mf.sigma=f1.GetParameter(4)
 	mf.depth_Al=f1.GetParameter(3)
 
@@ -77,11 +80,11 @@ if __name__=="__main__":
 	h1.SetLineColor(4)
 	f1.SetLineColor(4)
 	h1.Draw()
-	
+
 	##Draw TGraph##
 	ROOT.gStyle.SetOptFit();
 	g1=ROOT.TGraph()
-	for ch in range(0,4000,40):	
+	for ch in range(0,3200,100):	
 		t0=a*(ch-zero)
 		if t0>2.28:
 			break
@@ -105,15 +108,14 @@ if __name__=="__main__":
 	calib_num=int(re.sub(r'\D','',h1file))
 	output=[a,C,zero,calib_num]
 	np.savetxt("setup_calib.csv",output,delimiter=',')
-'''
-	
+'''	
 def stop(self):
 	sys.stderr.write('[Read]\tstop.\tPress "q"to quit >')
 	ans=raw_input ('>')
 	if ans in ['q','Q']:
 		h1.IsA().Destructor(h1)
 		fit.IsA().Destructor(fit)
-		g1.IsA().Destructor(g1)
+#		g1.IsA().Destructor(g1)
 		sys.exit(-1)
 	elif ans in ['.','q','Q']:
 		return -1
