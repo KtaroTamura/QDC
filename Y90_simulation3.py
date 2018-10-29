@@ -2,10 +2,11 @@ import myfunc as mf
 import numpy as np
 import ROOT,sys,re
 
+dCH=3.787765e-02
 ##Myfunc setuop##
 #inside
 mf.depth_Al=0.01
-mf.depth_CH=0.03963
+mf.depth_CH=0.03283250-dCH
 mf.depth_Pb=0.008
 mf.sigma=0.01257
 
@@ -17,8 +18,8 @@ if __name__=='__main__':
 	Pout=np.empty([])
 	Pin=np.empty([])
 	flag=0
-	for e in range(1,230):
-		T=0.01*e
+	for e in range(1,2300):
+		T=0.001*e
 		T2=mf.int_bethe(T)
 		T0=np.append(T0,T)
 		T1=np.append(T1,T2)
@@ -31,7 +32,7 @@ if __name__=='__main__':
 			Pin=np.append(Pin,P1)
 		else:
 			Pin=np.append(Pin,0)	
-	mf.depth_Al=0.005353
+	mf.depth_Al=0.03
 	mf.depth_CH=0.
 	mf.depth_Pb=0.
 	mf.sigma=0.01257

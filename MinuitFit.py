@@ -50,7 +50,7 @@ def Setup(main_x,main_y,main_xerr,main_yerr,main_func,main_ax):
 	
 def chisquare(*par,Dopt=True):
 	output=[]
-	graph_par=[] 
+	graph_par=np.empty([0,2])
 	res_text=''
 	par_num=len(par)
 	order="global m;m=im.Minuit(least_square{}".format(par_num)
@@ -63,13 +63,14 @@ def chisquare(*par,Dopt=True):
 	chi=fmin.fval/(len(data_y)-2)
 	for ii in range(0,par_num):
 		output.extend([param[ii].value,param[ii].error])
-		graph_par.extend([param[ii].value])
+		graph_par=np.append(graph_par,[[param[ii].value,param[ii].error]],axis=0)
+		#graph_par.append([param[ii].value,param[ii].error])
 		onestr='p{}= {} +- {}'.format(ii,param[ii].value,param[ii].error)+'\n'
 		res_text=res_text+onestr
 	output.append(chi)
 	res_text=res_text+'chi2/ndf={}'.format(chi)
 	if Dopt==True:
-		Draw_graph(*graph_par,k=chi)
+		Draw_graph(graph_par,k=chi)
 	print(res_text)
 	print('**************************************************\n\n')
 	return output 
@@ -99,20 +100,20 @@ def least_square4(a,b,c,d):
 	sigma=y_err**2+vir_err**2
 	return sum((data_y-fitfunc(data_x,*para))**2/sigma)
 
-
-def Draw_graph(*para,k=0):
+def Draw_graph(para,k=0):
 	global graph_counter
-	gx=np.arange(xmin,xmax,x_div)
-	fit_line=fitfunc(gx,*para)
+	gx=np.arange(xmin,xmax+x_div*0.9,x_div)
+	fit_par=para[:,0]
+	fit_line=fitfunc(gx,*fit_par)
 	ax.plot(gx,fit_line,color='r')
 	if graph_counter==0:
-		textstr=r'$\chi^2=%.2f$' % (k, )
+		textstr=r'$\chi^2:\ \ \ {:.3}$'.format(k)
 		par_num=len(para)
 		for i in range(0,par_num):
-			one='\n'+r'$p{}={:.4E}$'.format(i,para[i])
+			one='\n'+r'$p{}:\ \ {:.4}\pm{:.4} $'.format(i,para[i,0],para[i,1])
 			textstr=textstr+one
-		props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
-		plt.text(0.7,0.98,textstr,transform=ax.transAxes,fontsize=10,verticalalignment='top', bbox=props)
+		props = dict(boxstyle='round', facecolor='gainsboro', alpha=0.8)
+		plt.text(0.7,0.98,textstr,transform=ax.transAxes,fontsize=8,verticalalignment='top', bbox=props)
 		graph_counter=1
 	return 0
 

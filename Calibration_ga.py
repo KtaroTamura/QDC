@@ -16,8 +16,8 @@ mf.sigma=0.01
 ##Fitting seup##
 ped=52.
 loss=0.1
-fit_min=1500.
-fit_max=2950.
+fit_min=1800.
+fit_max=2700.
 #h1file="../Canadawork/databox_summer/sdata2018_0137.out"
 h1file="../Canadawork/databox_summer/sdata2018_0162.out"
 
@@ -61,11 +61,11 @@ if __name__=="__main__":
 	f1.SetParLimits(3,0.005,0.1)
 	f1.SetParLimits(4,0.005,0.1)
 	f1.SetParameters(0.00065,1000000,-150,0.005033,0.012)
-	f1.FixParameter(0,7.47429e-04)
-	f1.FixParameter(1,7.95340e+05)
-	#f1.FixParameter(2,ped)
+	#f1.FixParameter(0,7.47429e-04)
+	#f1.FixParameter(1,7.95340e+05)
+	f1.FixParameter(2,ped)
 	#f1.FixParameter(3,5.35794e-03)
-	f1.FixParameter(4,1.52911e-02)
+	f1.FixParameter(4,1.47891e-02)
 	h1.Fit("f1","P","",fit_min,fit_max)
 	a=f1.GetParameter(0)
 	C=f1.GetParameter(1)

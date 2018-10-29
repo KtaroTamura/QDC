@@ -3,34 +3,33 @@ import ROOT,sys,re
 import numpy as np
 
 ##Set Up##
-bin_min=-100
+bin_min=0
 bin_max=4200.
 rebin=int((bin_max-bin_min)/10)
 
 ##Myfunc setuop##
 mf.depth_Al=0.01
-mf.depth_CH=0.09
-mf.depth_Pb=0.008
-#mf.sigma=0.016498
+mf.depth_CH=0.
+mf.depth_Pb=0.
 mf.sigma=0.01
 
 ##Fitting seup##
-ped=52
-fit_min=2033.
-fit_max=2700.
+ped=52.
+loss=0.1
+fit_min=1400.
+fit_max=2300.
 #h1file="../Canadawork/databox_summer/sdata2018_0137.out"
-h1file="../Canadawork/databox_summer/sdata2018_0155.out"
+h1file="../Canadawork/databox_summer/sdata2018_0163.out"
 
-#a=7.66477e-04
-a=7.476e-04
-zero=52.
 
 class Fitting:
 	def __call__(self, ch, par):
-		C=par[0]
-		mf.depth_CH=par[1]
+		a=par[0]
+		C=par[1]
+		mf.depth_Al=par[3]
+		mf.sigma=par[4]
+		#zero=ped-loss/a
 		zero=par[2]
-		mf.sigma=par[3]
 		T0=a*(ch[0]-zero)
 		P=0
 		if T0>0 and T0<mf.E_max:
@@ -45,31 +44,35 @@ class Fitting:
 if __name__=="__main__":
 	##declation##
 	ROOT.gStyle.SetOptLogy()
-	h1=ROOT.TH1D("h1","data"+h1file.lstrip("../Canadawork/databox_summer/sdata"),rebin,bin_min,bin_max)
-	
-	##File Read & Fill histgram##
+	h1=ROOT.TH1D("h1","data"+h1file.lstrip("..Canadawork/databox_summer/sdata"),rebin,bin_min,bin_max)
+
+##File Read & Fill histgram##
 	data=open(h1file,"r")
 	for line in data:
 		count=int(line)
 		h1.Fill(count)
 	data.close()
-	
+
 	##Fitting##
-	f1=ROOT.TF1("f1",Fitting(),fit_min,fit_max,4)
-	f1.SetParNames("N_{0}","CH","ped","sigma")
-	f1.SetParameters(2.35e+06,0.001,52,0.01)
-	f1.SetParLimits(1,0.,0.08)
-	f1.SetParLimits(0,1e+04,1e+07)
-	f1.SetParLimits(3,0.0,0.1)
-	f1.SetParLimits(2,-200,200)
-	f1.FixParameter(3,0.014789)
-	f1.FixParameter(2,52.)
-	#f1.FixParameter(1,0.)
+	f1=ROOT.TF1("f1",Fitting(),fit_min,fit_max,5)
+	f1.SetParNames("a","N_{0}","zero","depth_Al","sigma")
+	f1.SetParLimits(0,2.0e-04,1.6e-03)
+	f1.SetParLimits(1,1.0e+05,1.0e+07)
+	f1.SetParLimits(3,0.005,0.1)
+	f1.SetParLimits(4,0.005,0.1)
+	f1.SetParameters(0.00065,1000000,-150,0.005033,0.012)
+	#f1.FixParameter(0,7.47429e-04)
+	#f1.FixParameter(1,7.95340e+05)
+	#f1.FixParameter(2,ped)
+	f1.FixParameter(3,5.63513e-03)
+	#f1.FixParameter(4,1.47891e-02)
 	h1.Fit("f1","P","",fit_min,fit_max)
-	C=f1.GetParameter(0)
-	mf.depth_CH=f1.GetParameter(1)
-	mf.sigma=f1.GetParameter(3)
-	zero=f1.GetParameter(2)
+	a=f1.GetParameter(0)
+	C=f1.GetParameter(1)
+	#zero=f1.GetParameter(2)
+	zero=ped
+	mf.sigma=f1.GetParameter(4)
+	mf.depth_Al=f1.GetParameter(3)
 
 	##Draw Setup##
 	h1.GetXaxis().SetTitle("QDC ch [ch]")
@@ -77,11 +80,11 @@ if __name__=="__main__":
 	h1.SetLineColor(4)
 	f1.SetLineColor(4)
 	h1.Draw()
-	
+
 	##Draw TGraph##
 	ROOT.gStyle.SetOptFit();
 	g1=ROOT.TGraph()
-	for ch in range(0,4000,40):	
+	for ch in range(0,4000,100):	
 		t0=a*(ch-zero)
 		if t0>2.28:
 			break
@@ -89,12 +92,11 @@ if __name__=="__main__":
 			t=mf.E_correction(t0)
 			PY=0
 			if t>0 and t<2.28:
-				PY=C*mf.G_correction(t)/23700.986076290093		
-				#PY=C*mf.Fermi(t)*mf.calc(t)/23700.986076290093	
+				PY=C*mf.G_correction(t)/23700.986076290093
+				#PY=C*mf.Fermi(t)*mf.calc(t)/23700.986076290093
 			y=PY
-			#print("t0={},t={}".format(t0,t))
 			g1.SetPoint(ch,ch,y)
-#			print("{},{}".format(ch,t))
+		#	print("{},{}".format(ch,t))
 			if y>0 and y<0.5:
 				print("EP={}".format(ch))
 				break
@@ -113,7 +115,7 @@ def stop(self):
 	if ans in ['q','Q']:
 		h1.IsA().Destructor(h1)
 		fit.IsA().Destructor(fit)
-		g1.IsA().Destructor(g1)
+#		g1.IsA().Destructor(g1)
 		sys.exit(-1)
 	elif ans in ['.','q','Q']:
 		return -1
